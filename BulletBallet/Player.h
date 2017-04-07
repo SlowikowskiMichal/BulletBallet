@@ -48,7 +48,7 @@ private:
 
 	//-------------------------------------------------------------
 	//Player shoots
-	vector<Bullet> bullets;
+	vector<Bullet *> bullets;
 	Clock shootTime;
 	float shootDelay;
 	float bulletSpeed;

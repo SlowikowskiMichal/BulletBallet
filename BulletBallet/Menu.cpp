@@ -82,13 +82,13 @@ void Menu::print()
 
 	Stars stars;
 
-	Text tytul[2] = { Text("BULLET",font[0], 100),Text("BALLET", font[0], 100) };
+	Text tytul[2] = { Text("BULLET",font[0], 100),Text("BALLET", font[0], 90) };
 	Text opcje[2] = { Text("PLAY",font[1], 40),Text(L"EXIT", font[1], 40) };
 
 	for (int i = 0; i < 2; i++)
 	{
 		tytul[i].setOrigin(tytul[i].getGlobalBounds().width/2, tytul[i].getGlobalBounds().height/2);
-		tytul[i].setPosition(okno.getSize().x / 2, 20 + i * 50);
+		tytul[i].setPosition(okno.getSize().x / 2, 30 + i * 75);
 		tytul[i].setOutlineThickness(3);
 		tytul[i].setOutlineColor(Color(75, 0, 130, 255));
 		tytul[i].setFillColor(Color(255,255,255, 220));

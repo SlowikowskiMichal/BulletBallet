@@ -1,7 +1,6 @@
 #include "Player.h"
 #include <math.h>
 #include <iostream>
-
 Player::Player()
 {
 	//Sprite
@@ -24,7 +23,7 @@ Player::Player()
 	moveTime.restart();
 
 	//Shoot
-	shootDelay = 0.05;
+	shootDelay = 0.1;
 	bulletSpeed = 600.f;
 	
 }
@@ -74,9 +73,9 @@ void Player::move()
 
 void Player::shoot(Vector2i mouse)
 {
-	bullets.push_back(* new Bullet(sprite.getPosition(), -atan2(mouse.x - sprite.getPosition().x, mouse.y - sprite.getPosition().y) + 1.57079632, bulletSpeed));
+	bullets.push_back( new Bullet(sprite.getPosition(), -atan2(mouse.x - sprite.getPosition().x, mouse.y - sprite.getPosition().y) + 1.57079632, bulletSpeed));
 	shootTime.restart();
-	
+	std::cout << bullets.size() << endl;
 }
 
 float Player::getShootDelay()
@@ -93,10 +92,15 @@ void Player::moveBullets()
 {
 	for (size_t i = 0; i < bullets.size(); i++)
 	{
-		if(bullets[i].outside())
-			bullets[i].move();
+		if(bullets[i]->outside())
+			bullets[i]->move();
 		else
-			bullets.erase(bullets.begin() + i);
+		{
+			std::swap(bullets[i], bullets.back());
+			delete bullets[bullets.size() - 1];
+			bullets.pop_back();
+		}
+			
 	}
 }
 
@@ -106,7 +110,7 @@ void Player::update()
 {
 	for (size_t i = 0; i < bullets.size(); i++)
 	{
-		bullets[i].update();
+		bullets[i]->update();
 	}
 }
 
@@ -123,6 +127,6 @@ void Player::drawBullets(RenderWindow & window)
 {
 	for (size_t i = 0; i < bullets.size(); i++)
 	{
-		window.draw(bullets[i]);
+		window.draw(*bullets[i]);
 	}
 }
