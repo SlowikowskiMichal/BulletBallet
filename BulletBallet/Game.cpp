@@ -25,6 +25,7 @@ Game::Game(RenderWindow &win, Sprite mouse) : window(win), sight(mouse)
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	};
+
 	if (!board.load("files/textures/floor.png", sf::Vector2u(32, 32), level, 25, 19))
 		cout << "Err" << endl;
 }
