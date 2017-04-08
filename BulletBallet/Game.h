@@ -20,5 +20,5 @@ private:
 	Clock frameTime;
 
 	Sprite sight;
-
+	void draw();
 };

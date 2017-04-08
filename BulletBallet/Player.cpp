@@ -4,16 +4,19 @@
 Player::Player()
 {
 	//Sprite
-	if (!texture.loadFromFile("files/textures/pointer.png"))
+	if (!texturePlayer.loadFromFile("files/textures/pointer.png"))
 	{
 			
 	}
 
-	sprite.setTexture(texture);
-	sprite.setTextureRect(IntRect(0, 0, 64, 64));
-	sprite.setPosition(400, 300);
-	sprite.setOrigin(32, 32);
-	sprite.setScale(0.5f, 0.5f);
+	spritePlayer.setTexture(texturePlayer);
+	spritePlayer.setTextureRect(IntRect(0, 0, 64, 64));
+	spritePlayer.setPosition(400, 300);
+	spritePlayer.setOrigin(32, 32);
+	spritePlayer.setScale(0.5f, 0.5f);
+
+	//Stats
+	health = 3;
 
 	//Velocity
 	maxSpeed = 250.f;
@@ -23,8 +26,9 @@ Player::Player()
 	moveTime.restart();
 
 	//Shoot
-	shootDelay = 0.1;
-	bulletSpeed = 600.f;
+	shootDelay = 0.25;
+	bulletSpeed = 500.f;
+	type = shotType::shotgun;
 	
 }
 
@@ -32,12 +36,28 @@ Player::~Player()
 {
 
 }
+
+//-------------------------------------------------------------
+int Player::getHealth()
+{
+	return health;
+}
+bool Player::hit()
+{
+	health--;
+	if (health > 0)
+		return true;
+	return false;
+	
+}
+
+
 //-------------------------------------------------------------
 //Player move
 
 void Player::setRotation(Vector2i mouse)
 {
-	sprite.setRotation(-atan2(mouse.x - sprite.getPosition().x, mouse.y - sprite.getPosition().y) * 180 / 3.14159265 + 180);
+	spritePlayer.setRotation(-atan2(mouse.x - spritePlayer.getPosition().x, mouse.y - spritePlayer.getPosition().y) * 180 / 3.14159265 + 180);
 }
 
 void Player::setSpeedY(int y)
@@ -54,16 +74,16 @@ void Player::move()
 {
 	if (speed.x || speed.y)
 	{
-		sprite.move(speed * moveTime.getElapsedTime().asSeconds());
+		spritePlayer.move(speed * moveTime.getElapsedTime().asSeconds());
 		speed = Vector2f(0.f, 0.f);
-		if (sprite.getPosition().x > 800)
-			sprite.setPosition(0, sprite.getPosition().y);
-		else if (sprite.getPosition().x < 0)
-			sprite.setPosition(800, sprite.getPosition().y);
-		if (sprite.getPosition().y > 600)
-			sprite.setPosition(sprite.getPosition().x, 0);
-		else if (sprite.getPosition().y < 0)
-			sprite.setPosition(sprite.getPosition().x, 600);
+		if (spritePlayer.getPosition().x > 800)
+			spritePlayer.setPosition(0, spritePlayer.getPosition().y);
+		else if (spritePlayer.getPosition().x < 0)
+			spritePlayer.setPosition(800, spritePlayer.getPosition().y);
+		if (spritePlayer.getPosition().y > 600)
+			spritePlayer.setPosition(spritePlayer.getPosition().x, 0);
+		else if (spritePlayer.getPosition().y < 0)
+			spritePlayer.setPosition(spritePlayer.getPosition().x, 600);
 	}
 	moveTime.restart();
 }
@@ -73,9 +93,20 @@ void Player::move()
 
 void Player::shoot(Vector2i mouse)
 {
-	bullets.push_back( new Bullet(sprite.getPosition(), -atan2(mouse.x - sprite.getPosition().x, mouse.y - sprite.getPosition().y) + 1.57079632, bulletSpeed));
+	switch (type)
+	{
+	case rifle:
+		bullets.push_back(new Bullet(spritePlayer.getPosition(), -atan2(mouse.x - spritePlayer.getPosition().x, mouse.y - spritePlayer.getPosition().y) + 1.57079632, bulletSpeed));
+		break;
+	case shotgun:
+		bullets.push_back(new Bullet(spritePlayer.getPosition(), -atan2(mouse.x - spritePlayer.getPosition().x, mouse.y - spritePlayer.getPosition().y) + 1.57079632, bulletSpeed));
+		bullets.push_back(new Bullet(spritePlayer.getPosition(), -atan2(mouse.x - spritePlayer.getPosition().x, mouse.y - spritePlayer.getPosition().y) + 1.37079632, bulletSpeed));
+		bullets.push_back(new Bullet(spritePlayer.getPosition(), -atan2(mouse.x - spritePlayer.getPosition().x, mouse.y - spritePlayer.getPosition().y) + 1.77079632, bulletSpeed));
+		break;
+	default:
+		break;
+	}
 	shootTime.restart();
-	std::cout << bullets.size() << endl;
 }
 
 float Player::getShootDelay()
@@ -120,7 +151,7 @@ void Player::update()
 
 void Player::draw(RenderTarget &target, RenderStates states) const
 {
-	target.draw(sprite);
+	target.draw(spritePlayer);
 }
 
 void Player::drawBullets(RenderWindow & window)

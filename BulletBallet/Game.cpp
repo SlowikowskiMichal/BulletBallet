@@ -42,7 +42,6 @@ void Game::start()
 
 	bool stay = true;
 
-
 	while (stay)
 	{
 		//-----------------------------------------------------------------------------------
@@ -116,4 +115,15 @@ void Game::start()
 			counter++;
 		
 	}
+}
+
+void Game::draw()
+{
+	window.clear(Color::Color(10, 0, 15, 255));
+	window.draw(board);
+	window.draw(player);
+	player.drawBullets(window);
+	window.draw(sight);
+	window.display();
+
 }

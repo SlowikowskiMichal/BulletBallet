@@ -11,6 +11,8 @@ Bullet::Bullet(Vector2f bPosition, float bAngle, float bSpeed) : frame(0)
 	sprite.setTextureRect(IntRect(0, 0, 32, 32));
 	sprite.setPosition(bPosition);
 	sprite.setOrigin(16, 16);
+	sprite.setScale(0.5, 0.5);
+	sprite.setColor(Color::Cyan);
 
 	speed = Vector2f(cosf(bAngle), sinf(bAngle)) * bSpeed;
 

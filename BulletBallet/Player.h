@@ -12,6 +12,11 @@ class Player : public Drawable, Transformable
 public:
 	Player();
 	~Player();
+	//-------------------------------------------------------------
+	//Stats
+
+	int getHealth();
+	bool hit();
 
 	//-------------------------------------------------------------
 	//Player move
@@ -36,8 +41,12 @@ public:
 private:
 	//-------------------------------------------------------------
 	//Player Sprite & Texture
-	Sprite sprite;
-	Texture texture;
+	Sprite spritePlayer;
+	Texture texturePlayer;
+
+	//-------------------------------------------------------------
+	//Stats
+	int health;
 
 	//-------------------------------------------------------------
 	//Player move
@@ -52,7 +61,8 @@ private:
 	Clock shootTime;
 	float shootDelay;
 	float bulletSpeed;
-
+	enum shotType {rifle,shotgun};
+	shotType type;
 
 	//-------------------------------------------------------------
 	//Draw player
