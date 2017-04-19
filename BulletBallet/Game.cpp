@@ -1,33 +1,14 @@
 #include "Game.h"
 #include <iostream>
 
-Game::Game(RenderWindow &win, Sprite mouse) : window(win), sight(mouse)
+Game::Game(RenderWindow &win, Sprite mouse) : window(win), sight(mouse), player(window.getSize().x, window.getSize().y), floor(window.getSize().x, window.getSize().y)
 {
-	const int level[] =
+	if (!theme.openFromFile("files/music/game.ogg"))
 	{
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	};
+		cout << "ere" << endl;
+	}
+	theme.setLoop(true);
 
-	if (!board.load("files/textures/floor.png", sf::Vector2u(32, 32), level, 25, 19))
-		cout << "Err" << endl;
 }
 
 Game::~Game()
@@ -37,6 +18,7 @@ Game::~Game()
 
 void Game::start()
 {
+	theme.play();
 	Clock clock;
 	int counter = 0;
 
@@ -78,31 +60,16 @@ void Game::start()
 
 		//------------------------------------------------------------------------------------------
 		//Set Objects Positions
-		player.setRotation(Mouse::getPosition(window));
-		player.move();
-
-		player.moveBullets();
-
-		sight.setPosition(Vector2f(Mouse::getPosition(window)));
+		update();
 
 		//--------------------------------------------------------------------------------------------
 		//Update
 
-		if (frameTime.getElapsedTime().asSeconds() > 0.2)
-		{
-			player.update();
-			frameTime.restart();
-		}
+		animation();
 
 		//------------------------------------------------------------------------
 		//Draw
-		window.clear(Color::Color(10, 0, 15, 255));
-		window.draw(board);
-		window.draw(player);
-		player.drawBullets(window);
-		window.draw(sight);
-		window.display();
-
+		draw();
 
 		//FPScounter-------------------------------------------------------------------------------------
 		if (clock.getElapsedTime().asSeconds() > 1)
@@ -115,15 +82,48 @@ void Game::start()
 			counter++;
 		
 	}
+	theme.stop();
+}
+
+void Game::update()
+{
+	player.setRotation(Mouse::getPosition(window));
+	player.move(window.getSize().x, window.getSize().y);
+
+	if (floor.isColliding(player.getPosition()))
+		player.restorePosition();
+
+	for (size_t i = 0; i < player.getBulletsCount();)
+	{
+		if (floor.isColliding(player.getBulletPosition(i)))
+		{
+			player.killBullet(i);
+		}
+		if (player.moveBullet(i, window.getSize().x, window.getSize().y))
+			i++;
+	}
+
+
+	sight.setPosition(Vector2f(Mouse::getPosition(window)));
+
+
+}
+
+void Game::animation()
+{
+	if (frameTime.getElapsedTime().asSeconds() > 0.2)
+	{
+		player.animation();
+		frameTime.restart();
+	}
 }
 
 void Game::draw()
 {
 	window.clear(Color::Color(10, 0, 15, 255));
-	window.draw(board);
-	window.draw(player);
+	window.draw(floor);
 	player.drawBullets(window);
+	window.draw(player);
 	window.draw(sight);
 	window.display();
-
 }

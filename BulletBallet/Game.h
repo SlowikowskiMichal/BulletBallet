@@ -2,7 +2,8 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 #include "Player.h"
-#include "Map.h"
+#include "Floor.h"
+
 using namespace sf;
 
 class Game
@@ -16,9 +17,12 @@ public:
 private:
 	RenderWindow &window;
 	Player player;
-	Map board;
+	Floor floor;
 	Clock frameTime;
-
+	Music theme;
 	Sprite sight;
+
+	void update();
+	void animation();
 	void draw();
 };

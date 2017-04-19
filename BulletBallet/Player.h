@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include <SFML\Audio.hpp>
 #include "Bullet.h"
 #include <vector>
 
@@ -11,6 +10,7 @@ class Player : public Drawable, Transformable
 {
 public:
 	Player();
+	Player(float,float);
 	~Player();
 	//-------------------------------------------------------------
 	//Stats
@@ -21,22 +21,30 @@ public:
 	//-------------------------------------------------------------
 	//Player move
 
+	Vector2f getPosition();
+
 	void setRotation(Vector2i);
-	void setSpeedY(int);
+	void setPosition(int, int);
 	void setSpeedX(int);
-	void move();
+	void setSpeedY(int);
+	void restorePosition();
+	void move(int,int);
 
 	//-------------------------------------------------------------
 	//Player shoots
 	float getShootDelay();
 	float getshootTime();
+	Vector2f getBulletPosition(int i);
+	size_t getBulletsCount();
+
 	void shoot(Vector2i);
-	void moveBullets();
+	bool moveBullet(int,int,int);
+	void killBullet(int);
 	void drawBullets(RenderWindow &);
 
 	//-------------------------------------------------------------
 	//Player Update Sprites
-	void update();
+	void animation();
 
 private:
 	//-------------------------------------------------------------
@@ -53,13 +61,14 @@ private:
 	Vector2f speed;
 	float maxSpeed;
 	Clock moveTime;
+	Vector2f lastPos;
 
 
 	//-------------------------------------------------------------
 	//Player shoots
-	vector<Bullet *> bullets;
 	Clock shootTime;
 	float shootDelay;
+	vector<Bullet *> bullets;
 	float bulletSpeed;
 	enum shotType {rifle,shotgun};
 	shotType type;

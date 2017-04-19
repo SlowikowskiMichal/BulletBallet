@@ -10,22 +10,22 @@ using namespace sf;
 
 class Menu
 {
+public:
+	Menu();
+	~Menu();
+	void start();
+
+protected:
+	enum GameState { MENU, GAME, END };
+	GameState state;
+
 private:
-	RenderWindow okno;
-	Font *font;										//przechowuje czcionkê
+	RenderWindow window;
 	Music theme;
-	void print();
-	void play();
+	Font *font;
 	Texture texture;
 	Sprite sprite;
 
-protected:
-	enum StanGry { MENU, GAME, GAME_OVER, END };
-	StanGry stan;
-
-public:
-	Menu();											//ustawia stan gry
-	~Menu();
-
-	void start();
+	void play();
+	void print();
 };
