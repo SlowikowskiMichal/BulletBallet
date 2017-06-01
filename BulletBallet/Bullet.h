@@ -8,7 +8,7 @@ class Bullet : public Drawable, Transformable
 {
 public:
 
-	Bullet(Vector2f, float, float,float);
+	Bullet(Vector2f, float, float,float, Texture, Color);
 	~Bullet();
 
 	void update();
@@ -17,6 +17,9 @@ public:
 	void setDead();
 	bool isInside(int, int);
 	virtual Vector2f getPosition();
+	float getAngle();
+	FloatRect getGlobalBounds();
+
 
 private:
 	

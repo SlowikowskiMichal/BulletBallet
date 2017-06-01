@@ -1,26 +1,19 @@
 #include "Bullet.h"
-#include <iostream>
 
-Bullet::Bullet(Vector2f bPosition, float bAngle, float bSpeed, float scale) : frame(0)
+Bullet::Bullet(Vector2f bPosition, float bAngle, float bSpeed, float scale, Texture bulletTexture, Color color) : frame(0), texture(bulletTexture)
 {
-
-	if (!texture.loadFromFile("files/textures/bullet1.png"))
-		exit(-200);
-
+	sprite.setColor(Color(color.r,color.g,color.b,175));
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 0, 32, 32));
 	sprite.setPosition(bPosition);
 	sprite.setOrigin(16, 16);
 	sprite.setScale(1, 1);
-	sprite.setColor(Color::Cyan);
 	sprite.setScale(scale, scale);
 	speed = Vector2f(cosf(bAngle), sinf(bAngle)) * bSpeed;
-
 	alive = true;
 
 
 }
-
 
 Bullet::~Bullet()
 {
@@ -44,6 +37,11 @@ void Bullet::move()
 	moveTime.restart();
 }
 
+FloatRect Bullet::getGlobalBounds()
+{
+	return sprite.getGlobalBounds();
+}
+
 Vector2f Bullet::getPosition()
 {
 	return sprite.getPosition();
@@ -59,7 +57,6 @@ void Bullet::setDead()
 	alive = false;
 }
 
-
 bool Bullet::isInside(int windowWidth, int windowHeight)
 {
 	if (sprite.getPosition().x > windowWidth || sprite.getPosition().x < 0 ||
@@ -68,6 +65,11 @@ bool Bullet::isInside(int windowWidth, int windowHeight)
 	else
 		return true;
 	
+}
+
+float Bullet::getAngle()
+{
+	return atan2(speed.y,speed.x) * 180/3.1415 - 90;
 }
 
 void Bullet::draw(RenderTarget &target, RenderStates states) const

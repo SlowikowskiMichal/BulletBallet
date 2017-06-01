@@ -1,9 +1,13 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
+#include "SFML\Network\IpAddress.hpp"
+#include "Error.h"
 #include <string>
+#include <regex>
 #include "Game.h"
 #include "Stars.h"
+
 
 using namespace std;
 using namespace sf;
@@ -25,7 +29,11 @@ private:
 	Font *font;
 	Texture texture;
 	Sprite sprite;
+	Stars stars;
+	string allInpt;
 
 	void play();
-	void print();
+	void mainMenu();
+	void scoreBoard(int);
+	string ipCheck();
 };

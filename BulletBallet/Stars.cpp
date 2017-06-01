@@ -49,8 +49,6 @@ void Stars::update()
 
 void Stars::reset(size_t i)
 {
-//	int speed = (std::rand() % 150 + 100);
-//	particles[i].speed = Vector2f(speed, 0);
 	vert[i].color.a = (std::rand() % static_cast<int>(particles[i].speed.x));
 	switch (i % 3)
 	{
